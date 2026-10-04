@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    tags: ["v*"]
+    tags: ["v*", "V*"]
   workflow_dispatch:
     inputs:
       tag:
@@ -42,10 +42,12 @@ jobs:
 
       - name: Derive version from tag
         run: |
-          V="${TAG#v}"
-          IFS='.' read -r MA MI PA <<< "${V%%[-+]*}"
+          V="${TAG#[vV]}"
+          V="${V%%[-+]*}"
+          IFS='.' read -r MA MI PA <<< "$V"
+          MA=$((10#${MA:-0})); MI=$((10#${MI:-0})); PA=$((10#${PA:-0}))
           echo "VERSION_NAME=$V" >> "$GITHUB_ENV"
-          echo "VERSION_CODE=$(( ${MA:-0} * 10000 + ${MI:-0} * 100 + ${PA:-0} ))" >> "$GITHUB_ENV"
+          echo "VERSION_CODE=$(( MA * 10000 + MI * 100 + PA ))" >> "$GITHUB_ENV"
 
       - name: Decode keystore
         env:
@@ -61,6 +63,23 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew :app:assembleRelease --stacktrace --no-daemon
+
+      - name: Sign APK with release key
+        env:
+          KS_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          BT=$(ls -d $ANDROID_HOME/build-tools/*/ | sort -V | tail -1)
+          for f in app/build/outputs/apk/release/*.apk; do
+            "${BT}apksigner" sign \
+              --ks "$RUNNER_TEMP/release.jks" \
+              --ks-pass env:KS_PASS \
+              --ks-key-alias "$KEY_ALIAS" \
+              --key-pass env:KEY_PASS \
+              --v1-signing-enabled true --v2-signing-enabled true --v3-signing-enabled true \
+              "$f"
+          done
 
       - name: Collect & rename APKs
         run: |
