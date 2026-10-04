@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.meow.music"
+    namespace = "com.prism.music"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.prism.music"
+        applicationId = "com.meow.music"
         minSdk = 26
         targetSdk = 36
         versionCode = 10
