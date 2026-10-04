@@ -6,15 +6,15 @@ plugins {
 }
 
 android {
-    namespace = "com.prism.music"
+    namespace = "com.meow.music"
     compileSdk = 37
 
     defaultConfig {
         applicationId = "com.prism.music"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 10
+        versionName = "2.0.0"
         vectorDrawables { useSupportLibrary = true }
     }
 
