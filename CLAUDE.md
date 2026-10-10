@@ -111,8 +111,13 @@ offline downloads, EQ/spatial audio, on-device "Replay" stats, and full Android 
 - `*.apk`, `local.properties`, keystores are gitignored.
 
 ## Current status / Next steps
+- v1.5.2 (versionCode 17, 2026-10-10): frosted menus, uncensored lyrics, taste-aware search, Liked songs playlist, playlist
+  rearranging, 20 top songs, PiP (features in `a9a8fd8`, see the notes above). **GitHub "Latest"** (`Prism.apk` release-key signed).
+  Built and unit-tested (plus a live uncensor test); not yet checked on the phone: PiP and its media-session controls, the Liked songs
+  playlist against a real account, the new menus in light/dark.
+- `.claude/settings.local.json` no longer denies reading `build/` or `*.apk` (the owner lifted it for releases).
 - v1.5.1 (versionCode 16, 2026-10-10): Home, Search, Library, Replay and Settings rebuilt on the 1.5 frosted look
-  (see "Frosted pages" above). **GitHub "Latest"** (commit `ff71b95`, `Prism.apk` release-key signed); not yet checked on the phone.
+  (see "Frosted pages" above). Commit `ff71b95`; not yet checked on the phone.
 - v1.4.4 (versionCode 14, 2026-10-10): plays reach the account's YT Music history again
   (checked on the phone). The WEB_REMIX `player` call (`YouTubeMusic.playerExtras`) answers "Video unavailable" with no
   `videostatsPlaybackUrl` unless it sends the player JS's `signatureTimestamp` (`StreamResolver.signatureTimestamp()`).
